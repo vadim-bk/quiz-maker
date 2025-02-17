@@ -1,18 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { QuizItem } from "../../types/quizItem";
 
 export const useScore = (quizItems: QuizItem[]) => {
-  const score = useRef<number | null>(null);
+  const [score, setScore] = useState<number | null>(null);
 
   useEffect(() => {
-    const value = quizItems.filter(
-      (quizItem) => quizItem.answer === quizItem.correct_answer
-    ).length;
-
-    score.current = value;
+    setScore(
+      quizItems.filter(
+        (quizItem) => quizItem.answer === quizItem.correct_answer
+      ).length
+    );
   }, [quizItems]);
 
   return {
-    score: score.current,
+    score,
   };
 };

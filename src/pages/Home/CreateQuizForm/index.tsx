@@ -54,7 +54,7 @@ export const CreateQuizForm = () => {
 
         <CreateButton
           id="createBtn"
-          isDisabled={!selectedCategoryId || !selectedDifficulty}
+          isDisabled={!selectedCategoryId || !selectedDifficulty || isLoading}
           isLoading={isLoading}
           onClick={handleCreate}
         />

@@ -17,10 +17,16 @@ export const useQuiz = () => {
     (items: QuizItem[]) =>
       items.map((item) => ({
         ...item,
-        answerOptions: [...item.incorrect_answers, item.correct_answer],
+        answerOptions: [...item.incorrect_answers, item.correct_answer].sort(
+          () => Math.random() - 0.5
+        ),
       })),
     []
   );
+
+  const resetQuizItems = useCallback(() => {
+    setQuizItems(initialValue);
+  }, [setQuizItems]);
 
   const fetchQuizItems = useCallback(
     async (selectedCategoryId: string, selectedDifficulty: string) => {
@@ -33,18 +39,20 @@ export const useQuiz = () => {
 
         const data = await response.json();
 
-        setQuizItems(mapQuizItems(data.results));
+        if (data.response_code === 0) {
+          setQuizItems(mapQuizItems(data.results));
+          setResponseCode(0);
+          return;
+        }
+
         setResponseCode(data.response_code);
+        resetQuizItems();
       } finally {
         setIsLoading(false);
       }
     },
-    [mapQuizItems, setIsLoading, setQuizItems, setResponseCode]
+    [mapQuizItems, resetQuizItems, setIsLoading, setQuizItems, setResponseCode]
   );
-
-  const resetQuizItems = useCallback(() => {
-    setQuizItems(initialValue);
-  }, [setQuizItems]);
 
   return {
     isLoading,

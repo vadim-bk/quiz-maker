@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { Loader } from "./Loader";
+
 const styles = {
   button: css`
     cursor: pointer;
