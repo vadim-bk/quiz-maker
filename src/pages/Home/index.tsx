@@ -1,60 +1,65 @@
+import { CreateQuizForm } from "./CreateQuizForm";
+import { useCallback, useMemo } from "react";
+import { useQuiz } from "../../store/useQuiz";
 import { css } from "@emotion/react";
-import { Dropdown } from "../../components/Dropdown";
-import { useCallback } from "react";
-import { CreateButton } from "./CreateButton";
-import { useCategory } from "./useCategory";
-import { useDifficulty } from "./useDifficulty";
+import { LinkButton } from "../../components/LinkButton";
+import { Question } from "../../components/Question";
+import { PageTitle } from "../../components/PageTitle";
+import { ROUTES } from "../../constants/routes";
 
 const styles = {
   container: css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    margin-top: 40px;
   `,
-  form: css`
+  buttonContainer: css`
     display: flex;
     justify-content: center;
-    width: 100%;
   `,
 };
 
 export const Home = () => {
-  const { categories, selectedCategoryId, selectCategory } = useCategory();
+  const { quizItems, setQuizItems } = useQuiz();
 
-  const { difficulties, selectedDifficulty, selectDifficulty } =
-    useDifficulty();
+  const isSubmitAllowed = useMemo(
+    () =>
+      quizItems?.length > 0 && quizItems.every((quizItem) => quizItem.answer),
+    [quizItems]
+  );
 
-  const handleCreate = useCallback(() => {
-    console.log(selectedCategoryId, selectedDifficulty);
-  }, [selectedCategoryId, selectedDifficulty]);
+  const handleAnswerClick = useCallback(
+    (question: string, value: string) => {
+      setQuizItems((prev) =>
+        prev.map((item) =>
+          item.question === question ? { ...item, answer: value } : item
+        )
+      );
+    },
+    [setQuizItems]
+  );
 
   return (
-    <div css={styles.container}>
-      <h2>QUIZ MAKER</h2>
+    <>
+      <PageTitle title="QUIZ MAKER" />
 
-      <div css={styles.form}>
-        <Dropdown
-          id="categorySelect"
-          options={categories}
-          placeholder="Select a category"
-          onChange={selectCategory}
-        />
+      <CreateQuizForm />
 
-        <Dropdown
-          id="difficultySelect"
-          options={difficulties}
-          placeholder="Select difficulty"
-          onChange={selectDifficulty}
-        />
+      {quizItems.length > 0 && (
+        <div css={styles.container}>
+          {quizItems.map((quizItem) => (
+            <Question
+              key={quizItem.question}
+              item={quizItem}
+              onAnswer={(value) => handleAnswerClick(quizItem.question, value)}
+            />
+          ))}
+        </div>
+      )}
 
-        <CreateButton
-          id="createBtn"
-          isDisabled={!selectedCategoryId || !selectedDifficulty}
-          onClick={handleCreate}
-        />
-      </div>
-    </div>
+      {isSubmitAllowed && (
+        <div css={[styles.container, styles.buttonContainer]}>
+          <LinkButton to={ROUTES.RESULTS}>Submit</LinkButton>
+        </div>
+      )}
+    </>
   );
 };

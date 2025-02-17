@@ -8,12 +8,12 @@ type Category = {
 export const useCategory = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<
-    Category["id"] | null
-  >(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
 
   const selectCategory = useCallback((value: string | null) => {
-    setSelectedCategoryId(Number(value));
+    setSelectedCategoryId(value);
   }, []);
 
   useEffect(() => {

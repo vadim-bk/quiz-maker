@@ -1,22 +1,24 @@
 import { css } from "@emotion/react";
-
+import { Loader } from "./Loader";
 const styles = {
   button: css`
-    height: 30px;
-    width: 70px;
+    cursor: pointer;
+    height: 40px;
+    width: 100px;
   `,
 };
 
 type Props = {
   id: string;
   isDisabled: boolean;
+  isLoading: boolean;
   onClick: () => void;
 };
 
-export const CreateButton = ({ isDisabled, onClick, id }: Props) => {
+export const CreateButton = ({ isDisabled, isLoading, onClick, id }: Props) => {
   return (
     <button css={styles.button} id={id} onClick={onClick} disabled={isDisabled}>
-      Create
+      {isLoading ? <Loader /> : "Create"}
     </button>
   );
 };

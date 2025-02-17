@@ -6,8 +6,8 @@ const PLACEHOLDER_OPTION_ID = "placeholder";
 
 const styles = {
   select: css`
-    height: 30px;
-    width: 200px;
+    height: 40px;
+    width: 250px;
   `,
 };
 
