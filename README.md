@@ -48,3 +48,19 @@ export default tseslint.config({
   },
 })
 ```
+
+## Deploying to GitHub Pages
+
+1. Build the project:
+   ```bash
+   npm run build
+   ```  
+
+2. Deploy the project:
+   ```bash
+   npm run deploy
+   ```
+
+3. Open the GitHub repository settings and update the GitHub Pages source to the `dist` folder.
+
+4. The project will be available at `https://{username}.github.io/{repository-name}/`.
